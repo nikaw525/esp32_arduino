@@ -19,24 +19,9 @@ void counterHandle(void){
   counter++;
 }
 
-void setup(void){   
-  Serial.begin(115200);  
-  Serial.println();
-  Serial.println();
-  Serial.print("Connecting to ");
-  Serial.println(ssid);   
-  WiFi.begin(ssid, password);     
-  while(WiFi.status() != WL_CONNECTED){    
-    delay(500);
-    Serial.print(".");
-  }
-  Serial.print("");
-  Serial.print("WiFi connected");
-  Serial.print("IP address: ");
-  Serial.println(WiFi.localIP()); 
-
+void setup(void){    
+  WiFi.begin(ssid, password);   
   server.on("/counter", counterHandle);
-
   server.begin();
 }
 
