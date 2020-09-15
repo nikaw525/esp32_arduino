@@ -50,22 +50,8 @@ void voltageHandle(void){
   server.send(200,"text/html", message);
 }
 
-void setup(void){   
-  Serial.begin(115200);  
-  Serial.println();
-  Serial.println();
-  Serial.print("Connecting to ");
-  Serial.println(ssid);   
-  WiFi.begin(ssid, password);     
-  while(WiFi.status() != WL_CONNECTED){    
-    delay(500);
-    Serial.print(".");
-  }
-  Serial.print("");
-  Serial.print("WiFi connected");
-  Serial.print("IP address: ");
-  Serial.println(WiFi.localIP()); 
-  
+void setup(void){    
+  WiFi.begin(ssid, password);   
   server.on("/voltage", voltageHandle);
   server.on("/current", currentHandle);
   server.on("/config", configHandle);
