@@ -1,7 +1,7 @@
 #include <WebServer.h>
 
-const char* ssid     = "abcde";
-const char* password = "12345";
+const char* ssid     = "Esp-Access-Point";
+const char* password = "1234567890";
 
 WebServer server(80);
 
@@ -19,8 +19,9 @@ void counterHandle(void){
   counter++;
 }
 
-void setup(void){    
-  WiFi.begin(ssid, password);   
+void setup(void){   
+  WiFi.mode(WIFI_AP); //Access Point mode
+  WiFi.softAP(ssid, password);    //Password length minimum 8 char     
   server.on("/counter", counterHandle);
   server.begin();
 }
