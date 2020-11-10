@@ -17,22 +17,8 @@ void rootHandle(void){
   server.send(200,"text/html", message);
 }
 
-void McounterHandle(void){
-  String message = "<!DOCTYPE html><HTML>";
-  message +=       "<BODY><h1>Plus / minus</h1>";
-  message +=        String(Mcounter);
-  message +=        "<form name='input' action='/get'>";
-  message +=        "p/n: <input type='text' name='p_n'>";
-  message +=        "<input type='submit' value='Wprowadz'>";
-  message +=        "</form><br>";
-  message +=       "<a href=\"/\"><button class=\"button\">Back to Pick section</button> </a>";
-  message +=        "</BODY>";
-  message +=        "</HTML>";
+void McounterHandle(void){  
 
-  server.send(200,"text/html", message);  
-}
-
-void MHandle(void){
   if(server.arg("p_n") == "p"){
       Mcounter = Mcounter + 1;
   }
@@ -42,15 +28,17 @@ void MHandle(void){
   
   String message = "<!DOCTYPE html><HTML>";
   message +=       "<BODY><h1>Plus / minus</h1>";
+  message +=       "Value: ";
   message +=        String(Mcounter);
-  message +=        "<form name='input' action='/get'>";
-  message +=        "p/n: <input type='text' name='p_n'>";
-  message +=        "<input type='submit' value='Wprowadz'>";
+  message +=        "<br>";
+  message +=        "<form>";
+  message +=        "<button name='p_n' type='submit' value='p'>p</button>";
+  message +=        "<button name='p_n' type='submit' value='n'>n</button>";
   message +=        "</form><br>";
   message +=       "<a href=\"/\"><button class=\"button\">Back to Pick section</button> </a>";
   message +=        "</BODY>";
-  message +=        "</HTML>";
-
+  message +=        "</HTML>";  
+  
   server.send(200,"text/html", message);  
 }
 
@@ -58,8 +46,7 @@ void setup(void){
   WiFi.mode(WIFI_AP); //Access Point mode
   WiFi.softAP(ssid, password);    //Password length minimum 8 char 
   server.on("/", rootHandle);    
-  server.on("/Mcounter", McounterHandle);
-  server.on("/get", MHandle);  
+  server.on("/Mcounter", McounterHandle);    
   server.begin();
  
 }
