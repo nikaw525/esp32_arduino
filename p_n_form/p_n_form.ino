@@ -30,11 +30,10 @@ void McounterHandle(void){
   message +=       "<BODY><h1>Plus / minus</h1>";
   message +=       "Value: ";
   message +=        String(Mcounter);
+  message +=        "<br>";  
+  message +=        "<a href=\"/Mcounter?p_n=p\"><button class=\"button\">p</button> </a>";
+  message +=        "<a href=\"/Mcounter?p_n=n\"><button class=\"button\">n</button> </a>";
   message +=        "<br>";
-  message +=        "<form>";
-  message +=        "<button name='p_n' type='submit' value='p'>p</button>";
-  message +=        "<button name='p_n' type='submit' value='n'>n</button>";
-  message +=        "</form><br>";
   message +=       "<a href=\"/\"><button class=\"button\">Back to Pick section</button> </a>";
   message +=        "</BODY>";
   message +=        "</HTML>";  
