@@ -1,3 +1,7 @@
+#include <WebServer.h>
+
+const char* ssid     = "Esp-Access-Point";
+const char* password = "1234567890";
 
 #define VD_CS 12
 #define VA_CS 14
@@ -11,6 +15,8 @@
 
 #define UP 1
 #define DOWN 0
+
+WebServer server(80);
 
 void potentiometer_set(int cs, int u_d, int imp_amount){  
   digitalWrite(U_D,u_d);
@@ -37,11 +43,41 @@ void potentiometer_init(){
 
 void setup() {  
   potentiometer_init();
+  
+  WiFi.mode(WIFI_AP); //Access Point mode
+  WiFi.softAP(ssid, password);    //Password length minimum 8 char 
+  server.on("/", rootHandle);        
+  server.begin();
+}
+
+void rootHandle(void){ 
+  String cs_str = server.arg("cs");
+  String u_d_str = server.arg("u_d");
+  String imp_amount_str = server.arg("imp_amount");
+  
+  int cs = cs_str.toInt();
+  int u_d = u_d_str.toInt();
+  int imp_amount = imp_amount_str.toInt();  
+
+   String message = "<!DOCTYPE html><HTML>";
+  message +=       "<BODY><h1>Potentiometer </h1>";
+  message +=       "CS:";
+  message +=        cs_str;
+  message +=        "<br>";
+  message +=       "U_D:";
+  message +=        u_d_str;
+  message +=        "<br>";
+  message +=       "Imp_amount: ";
+  message +=        imp_amount_str;
+  message +=        "<br>";
+  message +=        "</BODY>";
+  message +=        "</HTML>";  
+  
+  server.send(200,"text/html", message); 
+
+  potentiometer_set(cs, u_d,imp_amount);  
 }
 
 void loop() {
-  delay(10);
-  potentiometer_set(CALLIB_P_CS,DOWN,4);
-  delay(10);
-  potentiometer_set(CALLIB_P_CS,UP,4);  
+  server.handleClient();    
 }
