@@ -9,7 +9,10 @@
 #define CALLIB_P_CS 2
 #define U_D 23
 
-void MPC4022(int cs, int u_d, int imp_amount){  
+#define UP 1
+#define DOWN 0
+
+void potentiometer_set(int cs, int u_d, int imp_amount){  
   digitalWrite(U_D,u_d);
   delay(1);
   digitalWrite(cs, LOW);
@@ -23,31 +26,22 @@ void MPC4022(int cs, int u_d, int imp_amount){
   digitalWrite(cs, HIGH);
 }
 
+void potentiometer_init(){
+  int output_pins[]={VD_CS, VA_CS, VM_CS, VC_CS, VP_CS, HV_CS, CALLIB_N_CS, CALLIB_P_CS, U_D};
+
+  for(int i = 0; i<9; i++){
+    pinMode(output_pins[i],OUTPUT);
+    digitalWrite(output_pins[i],HIGH);
+  }  
+}
+
 void setup() {  
-  pinMode (VD_CS, OUTPUT);
-  pinMode (VA_CS, OUTPUT);
-  pinMode (VM_CS, OUTPUT);
-  pinMode (VC_CS, OUTPUT);
-  pinMode (VP_CS, OUTPUT);
-  pinMode (HV_CS, OUTPUT);
-  pinMode (CALLIB_N_CS, OUTPUT);
-  pinMode (CALLIB_P_CS, OUTPUT);
-  pinMode (U_D, OUTPUT);
-  
-  digitalWrite(VD_CS, HIGH); 
-  digitalWrite(VA_CS, HIGH);  
-  digitalWrite(VM_CS, HIGH);  
-  digitalWrite(VC_CS, HIGH);  
-  digitalWrite(VP_CS, HIGH);  
-  digitalWrite(HV_CS, HIGH);  
-  digitalWrite(CALLIB_N_CS, HIGH);  
-  digitalWrite(CALLIB_P_CS, HIGH);   
-  digitalWrite(U_D, HIGH);
+  potentiometer_init();
 }
 
 void loop() {
   delay(10);
-  MPC4022(CALLIB_P_CS,0,4);
+  potentiometer_set(CALLIB_P_CS,DOWN,4);
   delay(10);
-  MPC4022(CALLIB_P_CS,1,4);  
+  potentiometer_set(CALLIB_P_CS,UP,4);  
 }
