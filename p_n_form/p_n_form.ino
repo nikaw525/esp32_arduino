@@ -31,13 +31,14 @@ void McounterHandle(void){
   }
   
   String message = "<!DOCTYPE html><HTML>";
-  message +=       "<BODY><h1>Sekcja M: Plus / minus</h1>";
+  message +=       "<BODY><h1>Plus / minus</h1>";
   message +=       "Value: ";
   message +=        String(Mcounter);
-  message +=        "<br>";  
-  message +=        "<a href=\"/Mcounter?p_n=p\"><button class=\"button\">p</button> </a>";
-  message +=        "<a href=\"/Mcounter?p_n=n\"><button class=\"button\">n</button> </a>";
   message +=        "<br>";
+  message +=        "<form>";
+  message +=        "<button name='p_n' type='submit' value='p'>p</button>";
+  message +=        "<button name='p_n' type='submit' value='n'>n</button>";
+  message +=        "</form><br>";
   message +=       "<a href=\"/\"><button class=\"button\">Back to Pick section</button> </a>";
   message +=        "</BODY>";
   message +=        "</HTML>";  
@@ -55,18 +56,19 @@ void AcounterHandle(void){
   }
   
   String message = "<!DOCTYPE html><HTML>";
-  message +=       "<BODY><h1>Sekcja A: Plus / minus</h1>";
+  message +=       "<BODY><h1>Plus / minus</h1>";
   message +=       "Value: ";
   message +=        String(Acounter);
-  message +=        "<br>";  
-  message +=        "<a href=\"/Acounter?p_n=p\"><button class=\"button\">p</button> </a>";
-  message +=        "<a href=\"/Acounter?p_n=n\"><button class=\"button\">n</button> </a>";
   message +=        "<br>";
+  message +=        "<form>";
+  message +=        "<button name='p_n' type='submit' value='p'>p</button>";
+  message +=        "<button name='p_n' type='submit' value='n'>n</button>";
+  message +=        "</form><br>";
   message +=       "<a href=\"/\"><button class=\"button\">Back to Pick section</button> </a>";
   message +=        "</BODY>";
   message +=        "</HTML>";  
   
-  server.send(200,"text/html", message);  
+  server.send(200,"text/html", message);    
 }
 
 void DcounterHandle(void){  
@@ -79,18 +81,19 @@ void DcounterHandle(void){
   }
   
   String message = "<!DOCTYPE html><HTML>";
-  message +=       "<BODY><h1>Sekcja D: Plus / minus</h1>";
+  message +=       "<BODY><h1>Plus / minus</h1>";
   message +=       "Value: ";
   message +=        String(Dcounter);
-  message +=        "<br>";  
-  message +=        "<a href=\"/Dcounter?p_n=p\"><button class=\"button\">p</button> </a>";
-  message +=        "<a href=\"/Dcounter?p_n=n\"><button class=\"button\">n</button> </a>";
   message +=        "<br>";
+  message +=        "<form>";
+  message +=        "<button name='p_n' type='submit' value='p'>p</button>";
+  message +=        "<button name='p_n' type='submit' value='n'>n</button>";
+  message +=        "</form><br>";
   message +=       "<a href=\"/\"><button class=\"button\">Back to Pick section</button> </a>";
   message +=        "</BODY>";
   message +=        "</HTML>";  
   
-  server.send(200,"text/html", message);  
+  server.send(200,"text/html", message);   
 }
 
 void setup(void){    
