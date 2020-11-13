@@ -9,11 +9,30 @@ int Mcounter = 10;
 int Acounter = 10;
 int Dcounter = 10;
 
-void htmlHandle(int counter){
+String buttons_html(char Letter){
+
+  String output ="<a href=\"/";
+  output += Letter;
+  output += "counter\"><button class=\"button\">";
+  output += Letter;
+  output += "section</button> </a>\n";
+
+  return output;
+} 
+
+void htmlHandle(int *counter){
+
+  if(server.arg("p_n") == "p"){
+      *counter = *counter + 1;
+  }
+  if(server.arg("p_n") == "n"){
+      *counter = *counter - 1;
+  }  
+
     String message = "<!DOCTYPE html><HTML>";
   message +=       "<BODY><h1>Plus / minus</h1>";
   message +=       "Value: ";
-  message +=        String(counter);
+  message +=        String(*counter);
   message +=        "<br>";
   message +=        "<form>";
   message +=        "<button name='p_n' type='submit' value='p'>p</button>";
@@ -25,49 +44,33 @@ void htmlHandle(int counter){
   
   server.send(200,"text/html", message);  
 }
+
 void rootHandle(void){
+
+  char section_names[] = {'M', 'D', 'A'};
+
   String message = "<!DOCTYPE html><HTML>";
   message +=       "<BODY><h1>Pick section</h1>";
-  message +=       "<a href=\"/Mcounter\"><button class=\"button\">M section</button> </a>";
-  message +=       "<a href=\"/Acounter\"><button class=\"button\">A section</button> </a>";
-  message +=       "<a href=\"/Dcounter\"><button class=\"button\">D section</button> </a>";
+
+  for(int i = 0; i<3; i++){
+        message += buttons_html(section_names[i]);
+    }
   message +=        "</BODY>";
   message +=        "</HTML>";
 
   server.send(200,"text/html", message);
 }
 
-void McounterHandle(void){  
-
-  if(server.arg("p_n") == "p"){
-      Mcounter = Mcounter + 1;
-  }
-  if(server.arg("p_n") == "n"){
-      Mcounter = Mcounter - 1;
-  }  
-  htmlHandle(Mcounter);
+void McounterHandle(void){      
+  htmlHandle(&Mcounter);
 }
 
 void AcounterHandle(void){  
-
-  if(server.arg("p_n") == "p"){
-      Acounter = Acounter + 1;
-  }
-  if(server.arg("p_n") == "n"){
-      Acounter = Acounter - 1;
-  }  
- htmlHandle(Acounter);   
+ htmlHandle(&Acounter);   
 }
 
-void DcounterHandle(void){  
-
-  if(server.arg("p_n") == "p"){
-      Dcounter = Dcounter + 1;
-  }
-  if(server.arg("p_n") == "n"){
-      Dcounter = Dcounter - 1;
-  }  
-  htmlHandle(Dcounter); 
+void DcounterHandle(void){ 
+  htmlHandle(&Dcounter); 
 }
 
 void setup(void){    
