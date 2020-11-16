@@ -15,11 +15,11 @@ struct sekcje
 };
 
 struct sekcje Sekcje[number_of_sect]= {
-  [0] = {.SectionName = "Vddm", .VoltCounter=10},
-  [1] = {.SectionName = "Vdda", .VoltCounter=10},
-  [2] = {.SectionName = "Vdiscr", .VoltCounter=10},
-  [3] = {.SectionName = "Vcore", .VoltCounter=10},
-  [4] = {.SectionName = "Vlvds", .VoltCounter=10}
+  {.SectionName = "Vddm", .VoltCounter=10},
+  {.SectionName = "Vdda", .VoltCounter=10},
+  {.SectionName = "Vdiscr", .VoltCounter=10},
+  {.SectionName = "Vcore", .VoltCounter=10},
+  {.SectionName = "Vlvds", .VoltCounter=10}
  };
 
 void htmlHandle(void){
