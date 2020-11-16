@@ -5,6 +5,8 @@ const char* password = "1234567890";
 
 WebServer server(80);
 
+const int number_of_sect = 5;
+
 struct sekcje
 {
   String SectionName;
@@ -12,7 +14,13 @@ struct sekcje
   float CurrCounter;
 };
 
-sekcje Sekcje[5];
+struct sekcje Sekcje[number_of_sect]= {
+  [0] = {.SectionName = "Vddm", .VoltCounter=10},
+  [1] = {.SectionName = "Vdda", .VoltCounter=10},
+  [2] = {.SectionName = "Vdiscr", .VoltCounter=10},
+  [3] = {.SectionName = "Vcore", .VoltCounter=10},
+  [4] = {.SectionName = "Vlvds", .VoltCounter=10}
+ };
 
 void htmlHandle(void){
     
@@ -55,7 +63,7 @@ void rootHandle(void){
   message +=       "<BODY><h1>Pick section</h1>";
   message +=       "<form action='/Section'>";
 
-  for(int i = 0; i<5; i++){        
+  for(int i = 0; i<number_of_sect; i++){        
       message += "<button class=button name='section' type='submit' value=";
       message +=  String(i);
       message +=  ">";
@@ -71,21 +79,8 @@ void rootHandle(void){
 
 void setup(void){ 
 
-  Sekcje[0].SectionName = "Vddm";
-  Sekcje[0].VoltCounter = 10;
   
-  Sekcje[1].SectionName = "Vdda";
-  Sekcje[1].VoltCounter = 10;
-  
-  Sekcje[2].SectionName = "Vdiscr";
-  Sekcje[2].VoltCounter = 10;
-
-  Sekcje[3].SectionName = "Vcore";
-  Sekcje[3].VoltCounter = 10;
-
-  Sekcje[4].SectionName = "Vlvds ";
-  Sekcje[4].VoltCounter = 10;
-  
+    
   WiFi.mode(WIFI_AP); //Access Point mode
   WiFi.softAP(ssid, password);    //Password length minimum 8 char 
   server.on("/", rootHandle);    
