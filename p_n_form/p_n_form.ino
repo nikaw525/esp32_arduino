@@ -60,15 +60,17 @@ void potentiometer_init(){
 void htmlHandle(void){
   
   int sec_number = server.arg("section").toInt();  
- 
-  if(server.arg("p_n") == "p"){
+
+  switch(server.arg("p_n").toInt()){
+    case(1):
       potentiometer_set(Sekcje[sec_number].CS, UP, 1);
-         
-  }
-  else if(server.arg("p_n") == "n"){
+      break;
+    case(-1):
       potentiometer_set(Sekcje[sec_number].CS, DOWN, 1);  
-     }
-     
+      break;
+     default:
+      break;  
+  }
   Sekcje[sec_number].VoltCounter = ina219.getBusVoltage_V();
   Sekcje[sec_number].CurrCounter = ina219.getCurrent_mA();  
   
@@ -89,8 +91,8 @@ void htmlHandle(void){
   message +=        "<form action='/Section'>";
   message +=        "<input type=hidden name=section value=";
   message +=        String(sec_number); 
-  message +=        "><button class=button_1 name='p_n' type='submit' value='p'>p</button><br>";
-  message +=        "<button class=button_1 name='p_n' type='submit' value='n'>n</button><br>";
+  message +=        "><button class=button_1 name='p_n' type='submit' value='1'>p</button><br>";
+  message +=        "<button class=button_1 name='p_n' type='submit' value='-1'>n</button><br>";
   message +=        "</form><br>";
   message +=       "<a href=\'/\'><button class=button_2>Back to<br>Pick section</button> </a>";
   message +=        "</BODY>";
@@ -130,7 +132,7 @@ void cssHandle(void){
 }
 void setup(void){ 
   potentiometer_init();
-  ina219.begin();
+  ina219.begin();  
   WiFi.mode(WIFI_AP); //Access Point mode
   WiFi.softAP(ssid, password);    //Password length minimum 8 char 
   server.on("/", rootHandle);    
