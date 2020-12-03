@@ -38,10 +38,10 @@ void potentiometer_set(int cs, int imp_amount){
   int u_d = 0;
   
   if(imp_amount > 0){
-    u_d = 0;
+    u_d = UP;
   }
   if(imp_amount < 0){
-    u_d = 1;
+    u_d = DOWN;
     imp_amount = imp_amount*(-1);
   } 
   digitalWrite(U_D,u_d);
