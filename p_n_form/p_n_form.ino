@@ -1,5 +1,6 @@
 #include <WebServer.h>
 #include <Adafruit_INA219.h>
+#include <string.h>
 
 #include "stylesheet.h"
 
@@ -33,11 +34,21 @@ struct sekcje Sekcje[number_of_sect]= {
   {.SectionName = "Vlvds", .VoltCounter=10, .CurrCounter=0, .CS=25}
  };
 
-void potentiometer_set(int cs, int u_d, int imp_amount){  
+void potentiometer_set(int cs, int imp_amount){  
+  int u_d = 0;
+  
+  if(imp_amount > 0){
+    u_d = 0;
+  }
+  if(imp_amount < 0){
+    u_d = 1;
+    imp_amount = imp_amount*(-1);
+  } 
   digitalWrite(U_D,u_d);
   delay(1);
   digitalWrite(cs, LOW);
   delay(1);
+  
   for(int i=0; i<imp_amount; i++){
     digitalWrite(U_D,!u_d);
     delay(1);
@@ -51,7 +62,7 @@ void potentiometer_init(){
   pinMode(U_D, OUTPUT);
   digitalWrite(U_D,HIGH);
   
-  for(int i = 0; i<9; i++){
+  for(int i = 0; i<number_of_sect; i++){
     pinMode(Sekcje[i].CS,OUTPUT);
     digitalWrite(Sekcje[i].CS,HIGH);
   }  
@@ -60,19 +71,11 @@ void potentiometer_init(){
 void htmlHandle(void){
   
   int sec_number = server.arg("section").toInt();  
-
-  switch(server.arg("p_n").toInt()){
-    case(1):
-      potentiometer_set(Sekcje[sec_number].CS, UP, 1);
-      break;
-    case(-1):
-      potentiometer_set(Sekcje[sec_number].CS, DOWN, 1);  
-      break;
-     default:
-      break;  
-  }
+  
+  potentiometer_set(Sekcje[sec_number].CS, server.arg("p_n").toInt());
+ 
   Sekcje[sec_number].VoltCounter = ina219.getBusVoltage_V();
-  Sekcje[sec_number].CurrCounter = ina219.getCurrent_mA();  
+  Sekcje[sec_number].CurrCounter = ina219.getCurrent_mA()/1000;  
   
   
     String message = "<!DOCTYPE html><HTML>";  
@@ -84,9 +87,9 @@ void htmlHandle(void){
   message +=       Sekcje[sec_number].SectionName;  
   message +=       " Section<span></h2>";
   message +=       "<p1>Voltage: ";
-  message +=        String(Sekcje[sec_number].VoltCounter);
+  message +=        String(Sekcje[sec_number].VoltCounter,3);
   message +=       "</p1><p1>Current: ";
-  message +=        String(Sekcje[sec_number].CurrCounter);
+  message +=        String(Sekcje[sec_number].CurrCounter,3);
   message +=        "</p1><br><br><br>";
   message +=        "<form action='/Section'>";
   message +=        "<input type=hidden name=section value=";
@@ -133,6 +136,7 @@ void cssHandle(void){
 void setup(void){ 
   potentiometer_init();
   ina219.begin();  
+  ina219.setCalibration_32V_1A();
   WiFi.mode(WIFI_AP); //Access Point mode
   WiFi.softAP(ssid, password);    //Password length minimum 8 char 
   server.on("/", rootHandle);    
