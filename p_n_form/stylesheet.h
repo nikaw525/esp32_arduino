@@ -1,54 +1,71 @@
 const char CSS_page[] PROGMEM = R"=====(
-.button_1{	  
-  display: block;
-  height: 100px;
-  width: 100%;	
+.button_1{   
+  display: inline-block;
+  height: 20vw; 
+  width: 32%;
+  margin-left: 3px;
   border-radius: 8px;  
-  background-color: #262626;	  
+  background-color: #5e5e5e;    
   font-weight: bold;
-  font-size: 50px;	  
+  font-size: 8vw;   
+  font-family:Courier New;
   text-align: center;
-  color: #DFDC10; 	  
+  color: #DFDC10;     
 }
-.button_2{
-  display: block;
-  height: 200px;
-  width: 100%;	 
-  border-radius: 8px;
-  background-color: #595959;	  
+
+.button_3{    
+  display: inline-block;
+  height: 20vw; 
+  width: 47.5%;
+  margin-left: 3px;
+  border-radius: 8px;  
+  background-color: #5e5e5e;
+  margin-top: 10px;  
   font-weight: bold;
-  font-size: 50px;	  
+  font-size: 10vw;  
+  font-family:Courier New;  
+  text-align: center;
+  color: #DFDC10;     
+}
+p1 {    
+  display: inline-block;  
+  padding: 5vw 0vw 5vw 0vw;
+  width: 32%;
+  margin-top: 10px;
+  border-radius: 8px;  
+  background-color: #262626;  
+  font-weight: bold;
+  font-size: 8vw; 
+  font-family:Courier New;  
   text-align: center;
   color: #DFDC10;    
 }
-p1 {		
-  display: in-line;  
-  height: 100px;  
-  width: 60px;
-  border: none;
-  border-radius: 8px; 	  
-  background-color: #262626;
-  padding: 15px 15px 15px 15px;
+p2 {    
+  display: inline-block;
+  padding: 5vw 0vw 5vw 0vw;
+  width: 47.5%;
+  margin-left: 3px;
+  border-radius: 8px;  
+  background-color: #262626;  
   font-weight: bold;
-  font-size: 20px;	  
+  font-size: 10vw;   
+  font-family:Courier New;
   text-align: center;
-  color: #DFDC10; 
+  color: #DFDC10;    
 }
 body{
-	background-color:#d9d9d9;
+  background-color:#d9d9d9;
 }
 h2 {
    width: 100%; 
    text-align: center; 
-   border-bottom: 2px solid #262626; 
-   line-height: 0.1em;   
-   margin: 40px 0 40px; 
-   text-align: center;
-   font-size: 40px;
+   #border-bottom: 2px solid #262626; 
+   #border-top: 2px solid #262626; 
+   #line-height: 0.1em;   
+   
+   
+   font-size: 14vw; 
+   font-family:Courier New;
    color: #262626;
 } 
-h2 span { 
-	background:#d9d9d9; 
-	padding:0px 5px; 
-}
 )=====";

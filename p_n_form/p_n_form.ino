@@ -9,14 +9,15 @@ const char* password = "1234567890";
 
 WebServer server(80);
 
-Adafruit_INA219 ina219(0x40);
-
 #define U_D 23
 
 #define UP 0
 #define DOWN 1
 
 const int number_of_sect = 5;
+int refresh_counter = 0;
+
+String color[2] = {"#006600","#000099"};
 
 struct sekcje
 {
@@ -24,14 +25,15 @@ struct sekcje
   float VoltCounter;
   float CurrCounter;
   int CS;
+  Adafruit_INA219* Ina219;
 };
 
 struct sekcje Sekcje[number_of_sect]= {
-  {.SectionName = "Vddm", .VoltCounter=10, .CurrCounter=0, .CS=27},
-  {.SectionName = "Vdda", .VoltCounter=10, .CurrCounter=0, .CS=14},
-  {.SectionName = "Vdiscr", .VoltCounter=10, .CurrCounter=0, .CS=12},
-  {.SectionName = "Vcore", .VoltCounter=10, .CurrCounter=0, .CS=26},
-  {.SectionName = "Vlvds", .VoltCounter=10, .CurrCounter=0, .CS=25}
+  {.SectionName = "Vddm", .VoltCounter=0, .CurrCounter=0, .CS=27, new Adafruit_INA219(0x40)},
+  {.SectionName = "Vdda", .VoltCounter=0, .CurrCounter=0, .CS=14, new Adafruit_INA219(0x41)},
+  {.SectionName = "Vdiscr", .VoltCounter=0, .CurrCounter=0, .CS=12, new Adafruit_INA219(0x42)},
+  {.SectionName = "Vcore", .VoltCounter=0, .CurrCounter=0, .CS=26, new Adafruit_INA219(0x43)},
+  {.SectionName = "Vlvds", .VoltCounter=0, .CurrCounter=0, .CS=25, new Adafruit_INA219(0x44)}
  };
 
 void potentiometer_set(int cs, int imp_amount){  
@@ -70,12 +72,14 @@ void potentiometer_init(){
 
 void htmlHandle(void){
   
+  refresh_counter ++;
+  
   int sec_number = server.arg("section").toInt();  
   
   potentiometer_set(Sekcje[sec_number].CS, server.arg("p_n").toInt());
  
-  Sekcje[sec_number].VoltCounter = ina219.getBusVoltage_V();
-  Sekcje[sec_number].CurrCounter = ina219.getCurrent_mA()/1000;  
+  Sekcje[sec_number].VoltCounter = Sekcje[sec_number].Ina219->getBusVoltage_V();
+  Sekcje[sec_number].CurrCounter = Sekcje[sec_number].Ina219->getCurrent_mA()/1000;  
   
   
     String message = "<!DOCTYPE html><HTML>";  
@@ -83,47 +87,69 @@ void htmlHandle(void){
   message +=       "<link rel='stylesheet' type='text/css' href='stylesheet.css' media='screen'/>";
   message +=       "<meta name='viewport' content='width=device-width, initial-scale=1'>";
   message +=       "</HEAD>";
-  message +=       "<BODY><h2><span>";
+  message +=       "<BODY><h2 style='color:";
+  message +=       color[refresh_counter%2];
+  message +=       "'>";
   message +=       Sekcje[sec_number].SectionName;  
-  message +=       " Section<span></h2>";
-  message +=       "<p1>Voltage: ";
-  message +=        String(Sekcje[sec_number].VoltCounter,3);
-  message +=       "</p1><p1>Current: ";
-  message +=        String(Sekcje[sec_number].CurrCounter,3);
-  message +=        "</p1><br><br><br>";
-  message +=        "<form action='/Section'>";
-  message +=        "<input type=hidden name=section value=";
-  message +=        String(sec_number); 
-  message +=        "><button class=button_1 name='p_n' type='submit' value='1'>p</button><br>";
-  message +=        "<button class=button_1 name='p_n' type='submit' value='-1'>n</button><br>";
-  message +=        "</form><br>";
-  message +=       "<a href=\'/\'><button class=button_2>Back to<br>Pick section</button> </a>";
-  message +=        "</BODY>";
-  message +=        "</HTML>";  
+  message +=       "</h2><p2>";
+  message +=       String(Sekcje[sec_number].VoltCounter,3);
+  message +=       "</p2><p2>";
+  message +=       String(Sekcje[sec_number].CurrCounter,3);
+  message +=       "</p2><br><br><br>";
+  message +=       "<form action='/Section'>";
+  message +=       "<input type=hidden name=section value=";
+  message +=       String(sec_number); 
+  message +=       "><button class=button_3 name='p_n' type='submit' value='5'>+ +</button>";
+  message +=       "<button class=button_3 name='p_n' type='submit' value='1'>+</button>";
+  message +=       "<button class=button_3 name='p_n' type='submit' value='-5'>- -</button>";
+  message +=       "<button class=button_3 name='p_n' type='submit' value='-1'>-</button>";
+  message +=       "</form><br>";
+  message +=       "<a href=\'/\'><button class=button_3>Menu</button> </a>";
+  message +=       "<a href=\'/Section?section=";
+  message +=       String(sec_number); 
+  message +=       "\'><button class=button_3>Refresh</button></a>";
+  message +=       "</BODY>";
+  message +=       "</HTML>";  
   
   server.send(200,"text/html", message);  
 }
 
-void rootHandle(void){  
-
+void rootHandle(void){ 
+   
+  refresh_counter ++;
+  
+  for(int i = 0; i<number_of_sect;i++){
+    Sekcje[i].VoltCounter = Sekcje[i].Ina219->getBusVoltage_V();
+    Sekcje[i].CurrCounter = Sekcje[i].Ina219->getCurrent_mA()/1000;
+  }
+  
   String message = "<!DOCTYPE html><HTML>";
   message +=       "<HEAD>";
   message +=       "<link rel='stylesheet' type='text/css' href='stylesheet.css' media='screen'/>";
   message +=       "<meta name='viewport' content='width=device-width, initial-scale=1'>";
   message +=       "</HEAD>";
-  message +=       "<BODY><h2><span>Pick section</span></h2>";
+  message +=       "<BODY><h2 style='color:";
+  message +=       color[refresh_counter%2];
+  message +=       "'>Menu</h2>";
   message +=       "<form action='/Section'>";
 
-  for(int i = 0; i<number_of_sect; i++){        
-      message += "<button class=button_1 name='section' type='submit' value=";
-      message +=  String(i);
-      message +=  ">";
-      message +=  Sekcje[i].SectionName;      
-      message += " section</button> </a>";
+  for(int i = 0; i<number_of_sect; i++){  
+      message +=   "<button class=button_1 name='section' type='submit' value=";
+      message +=   String(i);
+      message +=   ">";
+      message +=   Sekcje[i].SectionName;
+      message +=   "</button></a>";
+      message +=   " <p1>";
+      message +=   String(Sekcje[i].VoltCounter,3);
+      message +=   "V</p1> <p1>";
+      message +=   String(Sekcje[i].CurrCounter,3);
+      message +=   "</p1></br>";
   }
-  message +=        "</form>";
-  message +=        "</BODY>";
-  message +=        "</HTML>";
+  message +=       "</form><form>";
+  message +=       "<button  class=button_3 name='save' type='submit' value='1' color=white>Save</button> </a>";
+  message +=       "<button class=button_3 name='refresh' type='submit' value='1'>Refresh</button> </a>";
+  message +=       "</form></BODY>";
+  message +=       "</HTML>";
 
   server.send(200,"text/html", message);
 }
@@ -135,8 +161,12 @@ void cssHandle(void){
 }
 void setup(void){ 
   potentiometer_init();
-  ina219.begin();  
-  ina219.setCalibration_32V_1A();
+  
+  for (int i = 0; i<number_of_sect; i++){
+  Sekcje[i].Ina219->begin();  
+  Sekcje[i].Ina219->setCalibration_16V_2A();
+  }
+  
   WiFi.mode(WIFI_AP); //Access Point mode
   WiFi.softAP(ssid, password);    //Password length minimum 8 char 
   server.on("/", rootHandle);    
