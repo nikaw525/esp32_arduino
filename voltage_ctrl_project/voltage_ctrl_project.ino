@@ -91,7 +91,8 @@ void htmlHandle(void){
   message +=       color[refresh_counter%2];
   message +=       "'>";
   message +=       Sekcje[sec_number].SectionName;  
-  message +=       "</h2><p2>";
+  message +=       "</h2>";
+  message +=        "<p4>U[V]</p4><p4>I[A]</p4><p2>";
   message +=       String(Sekcje[sec_number].VoltCounter,3);
   message +=       "</p2><p2>";
   message +=       String(Sekcje[sec_number].CurrCounter,3);
@@ -131,6 +132,7 @@ void rootHandle(void){
   message +=       "<BODY><h2 style='color:";
   message +=       color[refresh_counter%2];
   message +=       "'>Menu</h2>";
+  message +=       "<p3> </p3><p3>U[V]</p3><p3>I[A]</p3>";
   message +=       "<form action='/Section'>";
 
   for(int i = 0; i<number_of_sect; i++){  
@@ -141,7 +143,7 @@ void rootHandle(void){
       message +=   "</button></a>";
       message +=   " <p1>";
       message +=   String(Sekcje[i].VoltCounter,3);
-      message +=   "V</p1> <p1>";
+      message +=   "</p1> <p1>";
       message +=   String(Sekcje[i].CurrCounter,3);
       message +=   "</p1></br>";
   }

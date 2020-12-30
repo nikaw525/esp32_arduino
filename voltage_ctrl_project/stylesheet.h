@@ -68,4 +68,24 @@ h2 {
    font-family:Courier New;
    color: #262626;
 } 
+p3 {    
+  display: inline-block;  
+  padding: 1vw 0vw 1vw 0vw;
+  width: 32%;  
+  font-weight: bold;
+  font-size: 8vw; 
+  font-family:Courier New;  
+  text-align: center;
+  color: #262626;    
+}
+p4 {    
+  display: inline-block;
+  padding: 1vw 0vw 1vw 0vw;
+  width: 47.5%;   
+  font-weight: bold;
+  font-size: 10vw;   
+  font-family:Courier New;
+  text-align: center;
+  color: #262626;    
+}
 )=====";
