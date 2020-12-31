@@ -78,7 +78,7 @@ void htmlHandle(void){
   
   potentiometer_set(Sekcje[sec_number].CS, server.arg("p_n").toInt());
  
-  Sekcje[sec_number].VoltCounter = Sekcje[sec_number].Ina219->getBusVoltage_V();
+  Sekcje[sec_number].VoltCounter = (Sekcje[sec_number].Ina219->getBusVoltage_V()) + (Sekcje[sec_number].Ina219->getShuntVoltage_mV()/1000);
   Sekcje[sec_number].CurrCounter = Sekcje[sec_number].Ina219->getCurrent_mA()/1000;  
   
   
