@@ -1,6 +1,5 @@
 #include <WebServer.h>
 #include <Adafruit_INA219.h>
-#include <string.h>
 
 #include "stylesheet.h"
 
@@ -120,7 +119,7 @@ void rootHandle(void){
   refresh_counter ++;
   
   for(int i = 0; i<number_of_sect;i++){
-    Sekcje[i].VoltCounter = (Sekcje[sec_number].Ina219->getBusVoltage_V()) + (Sekcje[sec_number].Ina219->getShuntVoltage_mV()/1000);
+    Sekcje[i].VoltCounter = (Sekcje[i].Ina219->getBusVoltage_V()) + (Sekcje[i].Ina219->getShuntVoltage_mV()/1000);
     Sekcje[i].CurrCounter = Sekcje[i].Ina219->getCurrent_mA()/1000;
   }
   
